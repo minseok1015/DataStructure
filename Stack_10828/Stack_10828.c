@@ -11,16 +11,21 @@ typedef struct
 }Stack;
 
 void push(Stack*, int);
-void pop(Stack*);
-void size(Stack*);
-void empty(Stack*);
-void top(Stack*);
+int pop(Stack*);
+int size(Stack*);
+int empty(Stack*);
+int top(Stack*);
 
 int main()
 {
 	int N;
 	int i;
 	scanf("%d", &N);
+	if (N < 0 || N>10000)
+	{
+		printf("error\n");
+		exit(0);
+	}
 	Stack stack;
 	stack.size = 0;
 	stack.data = calloc(100, sizeof(int));
@@ -32,23 +37,28 @@ int main()
 		if (strcmp(input, "push") == 0)		//push를 입력했을 경우
 		{
 			scanf("%d", &num);
+			if (num < 0 || num>100000)
+			{
+				printf("error\n");
+				exit(0);
+			}
 			push(&stack, num);
 		}
 		else if (strcmp(input, "pop") == 0)		//pop를 입력했을 경우
 		{
-			pop(&stack);
+			printf("%d\n",pop(&stack));
 		}
 		else if (strcmp(input, "size") == 0)		//size를 입력했을 경우
 		{
-			size(&stack);
+			printf("%d\n",size(&stack));
 		}
 		else if (strcmp(input, "empty") == 0)		//empty를 입력했을 경우
 		{
-			empty(&stack);
+			printf("%d\n",empty(&stack));
 		}
 		else if (strcmp(input, "top") == 0)		//top을 입력했을 경우
 		{
-			top(&stack);
+			printf("%d\n",top(&stack));
 		}
 	}
 
@@ -59,43 +69,43 @@ void push(Stack* st,int n)
 	st->data[st->size++] = n;
 }
 
-void pop(Stack* st)
+int pop(Stack* st)
 {
 	if (st->size == 0)
 	{
-		printf("-1\n");
+		return -1;
 	}
 	else
 	{
-		printf("%d\n", st->data[--st->size]);
+		return st->data[--st->size];
 	}
 }
 
-void size(Stack* st)
+int size(Stack* st)
 {
-	printf("%d\n", st->size);
+	return st->size;
 }
 
-void empty(Stack* st)
-{
-	if (st->size == 0)
-	{
-		printf("1\n");
-	}
-	else
-	{
-		printf("0\n");
-	}
-}
-
-void top(Stack* st)
+int empty(Stack* st)
 {
 	if (st->size == 0)
 	{
-		printf("-1\n");
+		return 1;
 	}
 	else
 	{
-		printf("%d\n", st->data[st->size-1]);
+		return 0;
+	}
+}
+
+int top(Stack* st)
+{
+	if (st->size == 0)
+	{
+		return -1;
+	}
+	else
+	{
+		return st->data[st->size-1];
 	}
 }
