@@ -35,14 +35,12 @@ int main()
 		if (stack.data[stack.size - 1] == arr[i])
 		{
 			pop(&stack);
-			printf("-\n");
 		}
 		else
 		{
 			while (count != arr[i])
 			{
 				push(&stack, count);
-				printf("+\n");
 				count++;
 				if (count > n)
 				{
@@ -52,17 +50,19 @@ int main()
 			}
 			push(&stack, count);
 			count++;
-			printf("+\n");
 			pop(&stack);
-			printf("-\n");
 		}
+	}
+	for (i = 0; i < stack.num; i++)
+	{
+		printf("%c\n", stack.res[i]);
 	}
 }
 
 void push(Stack* st, int num)
 {
 	st->data[st->size++] = num;
-	st->res[st->num++] = '+';
+	st->res[st->num++] =  '+';
 }
 
 void pop(Stack* st)
