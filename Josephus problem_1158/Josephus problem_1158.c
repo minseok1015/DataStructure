@@ -2,15 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Que
+typedef struct Quenode
 {
-	int size;
-	int* data;
-	int count;
-}Que;
+	int data;
+	struct Quenode* link;
+}Quenode;
 
-int delete(Que*);
-void make_que(Que*,int);
+typedef struct Linked
+{
+	Quenode* front;
+	Quenode* rear;
+}Linked;
+
+
+void make_que(Linked* q, int n);
+int delete_que(Linked* q, int K);
+
 
 int main()
 {
@@ -18,30 +25,57 @@ int main()
 	scanf("%d", &N);
 	scanf("%d", &K);
 	if (K > N) exit(0);		// (1 ≤ K ≤ N ≤ 5,000) 조건을 위한 에러처리
-	Que que;
-	que.size = 1;
-	que.data = (int*)malloc(sizeof(int) * 5000);
-	que.count = N;
-	make_que(&que,N);
-	printf("< ");
+	if (N > 5000|| N < 1) exit(0);
+	Linked que;
+	make_que(&que, N);
+	
+	printf("<");
 	for (int i = 0; i < N; i++)
 	{
-		printf("%d ", delete(&que,K));
+		printf("%d", delete_que(&que, K));
+		if (i != N - 1) printf(", ");
 	}
 	printf(">");
 }
 
-int delete(Que* que,int k)
+void make_que(Linked* q, int n)
 {
-	que->count = (que->count + k) % (que->size-1);
-	return que->data[que->count];
+	for (int i = 1; i <= n; i++)
+	{
+		Quenode* temp = (Quenode*)malloc(sizeof(Quenode));
+		temp->data = i;
+		temp->link = NULL;
+		if (i == 1)
+		{
+			q->front = temp;
+			q->rear = temp;
+		}
+		else if (i == n)
+		{
+			q->rear->link = temp;
+			q->rear = temp;
+			q->rear->link = q->front;
+		}
+		else
+		{
+			q->rear->link = temp;
+			q->rear = temp;
+		}
+	}
 }
 
-void make_que(Que* que,int n)
+int delete_que(Linked* q, int k)
 {
-	int i;
-	for (i = 1; i <= n; i++)
+	Quenode* tmp = q->front;
+	int temp;
+	for (int i = 0; i < k-1; i++)
 	{
-		que->data[que->size++]=i;
+		q->rear = tmp;
+		tmp = tmp->link;
 	}
+	temp = tmp->data;
+	q->front = tmp->link;
+	q->rear->link = q->front;
+	free(tmp);
+	return temp;
 }
